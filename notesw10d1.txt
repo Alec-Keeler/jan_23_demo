@@ -1,0 +1,49 @@
+Front end dev
+    Defining requests
+    Handle responses
+Back end dev
+    Handle requests
+    Define responses
+
+API?
+    A collection of functions and processes that allow an application to respond
+    to requests with features/data.
+
+Framework?
+    An essential structure, or basic underyling system
+
+
+Start with express?
+    initialize node
+    Install necessary packages
+        express
+        nodemon
+    Add an app.js
+    initialize express
+    tell app to listen to a port
+    add a couple of script to start the server
+    test our server (create end point)
+
+Pieces of an end point (route, route handler, router (:())
+    method of the request
+        GET/POST/PUT/PATCH/DELETE
+        additional methods in app object
+            all, use (special)
+    path of the request
+        path needs to be string, RegEx, array or strings (or RegEx)
+    how to respond
+        send - responds with plain text or json depending on what is passed to it
+        json - sends JSON every time
+        status - set status of response (pass in a value)
+        redirect - allows us to redirect the user to a predefined route
+        render - allows cool stuff like html templating
+
+Getting info from client
+    req.body (requires app.use(express.json()))
+    route params
+        req.params
+        /users/1, /users/2, /users/9001
+        /users/:userId
+    query strings
+        req.query
+        /users?name=Alec
