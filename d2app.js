@@ -1,10 +1,25 @@
 const express = require('express')
 const app = express()
+require('dotenv').config()
+const fruitsRouter = require('./routes/fruits')
 
 app.use(express.json())
 // app.use(express.urlencoded())
 
-let fruits = ['apple', 'orange']
+const security = (req, res, next) => {
+    if (req.body.user !== 'Alec') {
+        const err = new Error('You are not authorized')
+        return next(err)
+    }
+    next()
+}
+
+// app.use(express.static('assets'))
+// app.use(express.static('assets/css'))
+app.use('/style', express.static('assets/css'))
+app.use('/dommanip', security, express.static('assets/scripts'))
+
+
 
 app.use((req, res, next) => {
     console.log('Path: ', req.path)
@@ -27,43 +42,24 @@ app.use((req, res, next) => {
     next()
 })
 
-const fruitChecker = (req, res, next) => {
-    if (!req.body.fruitName) {
-        const err = new Error('fruitName is required')
-        err.statusCode = 404
-        err.title = 'Fruit error'
-        return next(err)
-    }
-    if (fruits.includes(req.body.fruitName)) {
-        const err = new Error('That fruit is already in our list!')
-        err.statusCode = 404
-        err.title = 'Fruit error'
-        return next(err)
-    }
-    next()
-}
+
+app.use('/fruits', fruitsRouter)
+
+
 
 // app.use(fruitChecker)
 
-app.post('/fruit', [fruitChecker], (req, res) => {
-    // create a fruit resource
-    fruits.push(req.body.fruitName)
-    res.json(fruits)
+app.get('/animals', (req, res) => {
+    res.send('ANIMAL DATA')
 })
-
-app.get('/fruit', (req, res, next) => {
-    if (req.banana) {
-        res.json(fruits)
-    } else {
-        res.send('need fruit?')
-    }
-})
-
 // app.all('*', (req, res, next) => {
-// app.use((req, res, next) => {
-//     res.status(404)
-//     res.send('The requested resource could not be found :(')
-// })
+app.use((req, res, next) => {
+    // res.status(404)
+    // res.send('The requested resource could not be found :(')
+    const err = new Error('The requested resources could not be found')
+    err.statusCode = 404
+    next(err)
+})
 
 app.use((err, req, res, next) => {
     console.log(err)
