@@ -3,11 +3,11 @@ const app = express()
 
 app.use(express.json())
 
-// app.use((req, res, next) => {
-//     console.log('Path: ', req.path)
-//     console.log('Method: ', req.method)
-//     next('banana')
-// })
+app.use((req, res, next) => {
+    console.log('Path: ', req.path)
+    console.log('Method: ', req.method)
+    next('banana')
+})
 
 app.get('/test', (req, res) => {
     console.log(req.path)
