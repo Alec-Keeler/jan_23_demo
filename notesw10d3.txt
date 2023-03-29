@@ -1,0 +1,11 @@
+Create a table
+    CREATE TABLE table_name (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        col_name DATATYPE CONSTRAINTS
+    );
+
+Insert data
+    INSERT INTO table_name (col1, col2, col3)
+    VALUES
+    (value1, value2, value3),
+    (value1, value2, value3);
