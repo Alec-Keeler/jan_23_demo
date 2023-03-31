@@ -60,3 +60,36 @@ FROM pokemon_trainers
 JOIN trainers ON (trainers.id = pokemon_trainers.trainer_id)
 JOIN pokemon ON (pokemon_trainers.pokemon_id = pokemon.id)
 WHERE trainers.name = 'Dan';
+
+SELECT AVG(height), COUNT(*)
+FROM pokemon;
+
+SELECT AVG(height)
+FROM pokemon
+WHERE rarity_id = 3;
+
+SELECT rarity_id, AVG(height), AVG(weight)
+FROM pokemon
+WHERE evolves = true
+GROUP BY rarity_id
+HAVING rarity_id IN (3, 4, 5);
+
+SELECT * FROM rarity
+JOIN pokemon ON (rarity.id = pokemon.rarity_id)
+WHERE value = 'common';
+
+
+SELECT name FROM pokemon
+WHERE rarity_id IN (
+    SELECT id FROM rarity
+    WHERE encounter_chance > 50
+);
+
+INSERT INTO pokemon_trainers (trainer_id, pokemon_id)
+VALUES
+((
+    SELECT id FROM trainers WHERE name = 'Franco'
+),
+(
+    SELECT id FROM pokemon WHERE name = 'Piplup'
+));
