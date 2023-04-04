@@ -1,0 +1,38 @@
+Migrations
+    Creating tables
+        CREATE TABLE pokemon (
+            id ...
+            name...
+        )
+    Edit existing tables
+    rarity_id > rarityId
+    Table names are Capitalized and plural
+        Pokemon
+        Trainers
+        Rarities
+    npx sequelize-cli migration:generate --name create-pokemon
+    npx dotenv sequelize-cli db:migrate
+    npx dotenv sequelize-cli db:migrate:undo:all
+    down function in migrations should do the opposite of the up function
+Models
+    Class representation of the coresponding table
+    Models do ALL other SQL things
+        Queries
+    Allow us to INTERACT with our data
+    Capitalized, Singular version of the table name
+        Trainer
+        Pokemon
+        Rarity
+    npx sequelize-cli model:generate --name ModelName --attributes col1:datatype,col2:datatype
+Seeders
+    Stores default data
+    Inserts data WITHOUT model by default
+    npx sequelize-cli seed:generate --name trainer-data
+    npx dotenv sequelize db:seed:all
+    npx dotenv sequelize db:seed:undo //:all
+
+If resetting db/files:
+unseed
+unmigrate
+migrate
+seed
