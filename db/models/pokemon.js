@@ -11,6 +11,13 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
+      Pokemon.belongsTo(models.Rarity, {foreignKey: 'rarenessId'})
+      // FROM Pokemons JOIN Rarities ON (Rarities.id = Pokemons.rarenessId)
+      Pokemon.belongsToMany(models.Trainer, {
+        through: models.PokemonTrainer,
+        foreignKey: 'pokemonId',
+        otherKey: 'trainerId'
+      })
     }
   }
   Pokemon.init({
@@ -30,12 +37,7 @@ module.exports = (sequelize, DataTypes) => {
     height: DataTypes.NUMERIC,
     weight: DataTypes.NUMERIC,
     evolves: DataTypes.BOOLEAN,
-    rarity: {
-      type: DataTypes.STRING,
-      validate: {
-        isIn: [['common', 'uncommon', 'rare', 'mythic', 'legendary']]
-      }
-    }
+    rarenessId: DataTypes.INTEGER 
   }, {
     sequelize,
     modelName: 'Pokemon',

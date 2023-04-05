@@ -4,8 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "node d3app.js",
-    "dev": "nodemon d3app.js"
+    "start": "node w11app.js",
+    "dev": "nodemon w11app.js",
+    "reset": "npx dotenv sequelize db:seed:undo:all && npx dotenv sequelize db:migrate:undo:all && npx dotenv sequelize db:migrate && npx dotenv sequelize db:seed:all"
   },
   "repository": {
     "type": "git",

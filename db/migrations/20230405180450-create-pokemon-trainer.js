@@ -2,35 +2,26 @@
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable('Pokemons', {
+    await queryInterface.createTable('PokemonTrainers', {
       id: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-      name: {
-        allowNull: false,
-        type: Sequelize.STRING(150),
-        unique: true
-      },
-      height: {
-        allowNull: false,
-        type: Sequelize.NUMERIC(4,2)
-      },
-      weight: {
-        allowNull: false,
-        type: Sequelize.NUMERIC(5,2)
-      },
-      evolves: {
-        allowNull: false,
-        type: Sequelize.BOOLEAN
-      },
-      rarenessId: {
+      pokemonId: {
         allowNull: false,
         type: Sequelize.INTEGER,
         references: {
-          model: 'Rarities'
+          model: 'Pokemons'
+        },
+        onDelete: 'CASCADE'
+      },
+      trainerId: {
+        allowNull: false,
+        type: Sequelize.INTEGER,
+        references: {
+          model: 'Trainers'
         },
         onDelete: 'CASCADE'
       },
@@ -47,6 +38,6 @@ module.exports = {
     });
   },
   async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable('Pokemons');
+    await queryInterface.dropTable('PokemonTrainers');
   }
 };

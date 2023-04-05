@@ -2,37 +2,20 @@
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable('Pokemons', {
+    await queryInterface.createTable('Rarities', {
       id: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-      name: {
+      value: {
         allowNull: false,
-        type: Sequelize.STRING(150),
+        type: Sequelize.STRING,
         unique: true
       },
-      height: {
-        allowNull: false,
-        type: Sequelize.NUMERIC(4,2)
-      },
-      weight: {
-        allowNull: false,
-        type: Sequelize.NUMERIC(5,2)
-      },
-      evolves: {
-        allowNull: false,
-        type: Sequelize.BOOLEAN
-      },
-      rarenessId: {
-        allowNull: false,
-        type: Sequelize.INTEGER,
-        references: {
-          model: 'Rarities'
-        },
-        onDelete: 'CASCADE'
+      encounterChance: {
+        type: Sequelize.NUMERIC
       },
       createdAt: {
         allowNull: false,
@@ -47,6 +30,6 @@ module.exports = {
     });
   },
   async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable('Pokemons');
+    await queryInterface.dropTable('Rarities');
   }
 };

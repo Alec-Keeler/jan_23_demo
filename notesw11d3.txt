@@ -1,0 +1,25 @@
+Query methods
+    findOne
+    findAll
+    findByPk
+    destroy
+
+
+
+Relationships
+    foreign keys:
+        references: {
+            model: "TableName"
+        }
+
+
+    1-M
+        hasMany
+        belongsTo
+    M-M
+        belongsToMany
+
+    Association methods
+    createModel (makes an associated record)
+    addModel (makes join table records)
+    getModel(s) (retrieves associated record(s))
