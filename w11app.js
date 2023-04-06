@@ -41,6 +41,47 @@ app.get('/pokemon', async(req, res) => {
 
 })
 
+app.get('/pokemon/data', async(req, res) => {
+    const count = await Pokemon.count()
+    const minHeight = await Pokemon.min('height')
+    const maxHeight = await Pokemon.max('height')
+    const totalWeight = await Pokemon.sum('weight')
+
+    res.json({
+        count,
+        minHeight,
+        maxHeight,
+        totalWeight,
+        avgWeight: totalWeight / count
+    })
+})
+
+app.get('/trainers/:id', async(req, res) => {
+    const trainer = await Trainer.findByPk(req.params.id, {
+        include: {
+            model: Pokemon,
+            through: {
+                attributes: []
+            }
+        }
+    })
+
+    const count = trainer.Pokemons.length
+
+    let height = 0
+    for (let i = 0; i < trainer.Pokemons.length; i++) {
+        const pokemon = trainer.Pokemons[i];
+        height = height + pokemon.height
+    }
+    
+
+    res.json({
+        enslavedPokeCount: count,
+        avgEnslavedPokeHeight: height / count,
+        trainer
+    })
+})
+
 app.get('/pokemon/:id', async(req, res) => {
     // const pokemon = await Pokemon.findOne({
     //     where: {
@@ -55,14 +96,43 @@ app.get('/pokemon/:id', async(req, res) => {
     res.json(pokemon)
 })
 
-app.post('/pokemon', async(req, res) => {
-    const {name, height, weight, evolves, rarity} = req.body
+const createPokemonChecker = (req, res, next) => {
+    const { name, height, weight, evolves, rarenessId } = req.body
+    let errors = []
+    if (!name) {
+        errors.push('Please provide a name for the new pokemon')
+    }
+    if (!height) {
+        errors.push('Please provide a height value')
+    }
+    if (!weight) {
+        errors.push('Please provide a weight value')
+    }
+    if (!evolves) {
+        errors.push('Please provide an evolves value')
+    }
+    if (!rarenessId) {
+        errors.push('Please provide a rarenessId value')
+    }
+    
+    if (errors.length > 0) {
+        const err = {
+            message: errors,
+            statusCode: 405
+        }
+        return next(err)
+    }
+    next()
+}
+
+app.post('/pokemon', createPokemonChecker, async(req, res) => {
+    const {name, height, weight, evolves, rarenessId} = req.body
     const pokemon = Pokemon.build({
         name,
         height,
         weight,
         evolves,
-        rarity
+        rarenessId
     })
     pokemon.validate()
     await pokemon.save()
@@ -76,20 +146,32 @@ app.post('/pokemon', async(req, res) => {
     res.json(pokemon)
 })
 
-app.delete('/pokemon/:id', async(req, res) => {
+app.delete('/pokemon/:id', async(req, res, next) => {
     // const poke = await Pokemon.destroy({
     //     where: {
     //         id: req.params.id
     //     }
     // }) //DELETE FROM Pokemon WHERE id = ?
     const pokemon = await Pokemon.findByPk(req.params.id)
-    await pokemon.destroy()
-    res.json('pokemon destroyed')
+    if (pokemon) {
+        await pokemon.destroy()
+        res.json('pokemon destroyed')
+    } else {
+        const err = new Error(`There was no pokemon with the given id: ${req.params.id}`)
+        err.statusCode = 404
+        next(err)
+    }
 })
 
-app.put('/pokemon/:id', async(req, res) => {
+app.put('/pokemon/:id', async(req, res, next) => {
     const {name, weight, height, evolves, rarity} = req.body
     const pokemon = await Pokemon.findByPk(req.params.id)
+    if (!pokemon) {
+        const err = new Error(`There was no pokemon with the given id: ${req.params.id}`)
+        err.statusCode = 404
+        return next(err)
+    }
+
     if (name) {
         pokemon.name = name
     }
@@ -169,6 +251,15 @@ app.get('/associations', async(req, res) => {
         include: Pokemon
     })
     res.json(trainerPokemons)
+})
+
+app.use((err, req, res, next) => {
+    const status = err.statusCode || 500
+    res.status(status)
+    res.json({
+        message: err.message || 'Something went wrong :(',
+        statusCode: status
+    })
 })
 
 const port = process.env.PORT
