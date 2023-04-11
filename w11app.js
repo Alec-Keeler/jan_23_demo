@@ -1,5 +1,5 @@
 const express = require('express')
-const { Op } = require("sequelize");
+const { Op, where } = require("sequelize");
 const app = express();
 require('dotenv').config()
 app.use(express.json())
@@ -251,6 +251,71 @@ app.get('/associations', async(req, res) => {
         include: Pokemon
     })
     res.json(trainerPokemons)
+})
+
+// /search?page=1&size=5
+app.get('/search', async(req, res) => {
+    let {page, size, name, maxHeight, rarity, trainerName} = req.query
+
+    //pagination
+    let queryObj = {
+        where: {},
+        include: []
+    }
+    // let limit = size;
+    // let offset;
+    if (page <= 1) page = 1
+    if (size <= 1) size = 5
+    if (page || size) {
+        queryObj.limit = size ? size : 5
+        queryObj.offset = page ? size * (page - 1) : 0
+    }
+
+    if (name) {
+        queryObj.where.name = name
+    }
+
+    if (maxHeight) {
+        // queryObj.where = {height: {
+        //     [Op.lte]: maxHeight
+        // }}
+        queryObj.where.height = {
+            [Op.lte]: maxHeight
+        }
+    }
+
+    if (rarity) {
+        queryObj.include.push({
+            model: Rarity,
+            where: {
+                value: rarity
+            }
+        })
+    }
+
+    if (trainerName) {
+        queryObj.include.push({
+            model: Trainer,
+            where: {
+                name: {
+                    [Op.substring]: trainerName
+                }
+            }
+        })
+    }
+
+
+    try {
+        const results = await Pokemon.findAll({
+            ...queryObj
+        })
+    
+        res.json(results)
+    } catch (e) {
+        console.log(e)
+        res.json(e)
+    }
+
 })
 
 app.use((err, req, res, next) => {
