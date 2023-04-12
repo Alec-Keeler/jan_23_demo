@@ -3,7 +3,7 @@ const { Op, where } = require("sequelize");
 const app = express();
 require('dotenv').config()
 app.use(express.json())
-
+//CHANGE!
 const {Pokemon, Rarity, Trainer} = require('./db/models')
 
 app.get('/pokemon', async(req, res) => {
