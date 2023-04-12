@@ -16,8 +16,8 @@ module.exports = (sequelize, DataTypes) => {
       // JOIN Pokemons ON (Pokemons.id = PokemonTrainers.pokemonId)
       Trainer.belongsToMany(models.Pokemon, {
         through: models.PokemonTrainer,
-        // foreignKey: 'trainerId',
-        // otherKey: 'pokemonId'
+        foreignKey: 'trainerId',
+        otherKey: 'pokemonId'
       })
     }
   }
