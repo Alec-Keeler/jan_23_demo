@@ -1,5 +1,9 @@
 'use strict';
-
+let options = {};
+if (process.env.NODE_ENV === 'production') {
+  options.schema = process.env.SCHEMA;  // define your schema in options object
+}
+options.tableName = 'Rarities'
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up (queryInterface, Sequelize) {
@@ -12,7 +16,7 @@ module.exports = {
      *   isBetaMember: false
      * }], {});
     */
-    await queryInterface.bulkInsert('Rarities', [
+    await queryInterface.bulkInsert(options, [
       { value: 'common', encounterChance: 90.0 },
       { value: 'uncommon', encounterChance: 75.8 },
       { value: 'rare', encounterChance: 40.34 },
@@ -28,6 +32,6 @@ module.exports = {
      * Example:
      * await queryInterface.bulkDelete('People', null, {});
      */
-    await queryInterface.bulkDelete('Rarities')
+    await queryInterface.bulkDelete(options)
   }
 };

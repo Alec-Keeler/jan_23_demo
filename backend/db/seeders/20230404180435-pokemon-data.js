@@ -1,4 +1,10 @@
 'use strict';
+
+let options = {};
+if (process.env.NODE_ENV === 'production') {
+  options.schema = process.env.SCHEMA;  // define your schema in options object
+}
+options.tableName = 'Pokemon'
 const {Pokemon, Rarity} = require('../models')
 
 let pokemons = [
@@ -68,7 +74,7 @@ module.exports = {
      * Example:
      * await queryInterface.bulkDelete('People', null, {});
      */
-    await queryInterface.bulkDelete('Pokemons') // DELETE FROM Pokemons;
+    await queryInterface.bulkDelete(options) // DELETE FROM Pokemons;
     // await queryInterface.bulkDelete('Pokemons', {
     //   name: ['Squirtle'] //...
     // }) // DELETE FROM Pokemons WHERE name IN ('Squirtle');

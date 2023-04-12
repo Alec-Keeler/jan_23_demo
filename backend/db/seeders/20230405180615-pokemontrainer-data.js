@@ -1,4 +1,10 @@
 'use strict';
+
+let options = {};
+if (process.env.NODE_ENV === 'production') {
+  options.schema = process.env.SCHEMA;  // define your schema in options object
+}
+options.tableName = 'PokemonTrainers'
 let pokemonTrainers = [
   { name: 1, pokemonIds: [2, 6, 8] },
   { name: 2, pokemonIds: [1, 3, 7] },
@@ -16,7 +22,7 @@ module.exports = {
     //   await trainer.addPokemons(data.pokemonIds)
     // }
 
-    await queryInterface.bulkInsert('PokemonTrainers', [
+    await queryInterface.bulkInsert(options, [
       { trainerId: 1, pokemonId: 2 },
       { trainerId: 1, pokemonId: 6 },
       { trainerId: 1, pokemonId: 8 },
@@ -36,6 +42,6 @@ module.exports = {
      * Example:
      * await queryInterface.bulkDelete('People', null, {});
      */
-    await queryInterface.bulkDelete('PokemonTrainers')
+    await queryInterface.bulkDelete(options)
   }
 };
