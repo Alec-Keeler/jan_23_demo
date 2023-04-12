@@ -4,7 +4,7 @@ let options = {};
 if (process.env.NODE_ENV === 'production') {
   options.schema = process.env.SCHEMA;  // define your schema in options object
 }
-options.tableName = 'Pokemon'
+options.tableName = 'Pokemons'
 const {Pokemon, Rarity} = require('../models')
 
 let pokemons = [
