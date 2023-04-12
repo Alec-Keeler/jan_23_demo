@@ -16,7 +16,7 @@ module.exports = {
      *   isBetaMember: false
      * }], {});
     */
-    await queryInterface.bulkInsert(options, [
+    await queryInterface.bulkInsert('Trainers', [
       { name: 'Dan', gymBadges: 4, bike: true },
       { name: 'Franco', gymBadges: 5, bike: false },
       { name: 'Olivia', gymBadges: 8, bike: true }
