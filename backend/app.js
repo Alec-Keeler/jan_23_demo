@@ -56,30 +56,34 @@ app.get('/pokemon/data', async(req, res) => {
     })
 })
 
-app.get('/trainers/:id', async(req, res) => {
-    const trainer = await Trainer.findByPk(req.params.id, {
-        include: {
-            model: Pokemon,
-            through: {
-                attributes: []
+app.get('/trainers/:id', async(req, res, next) => {
+    try {
+        const trainer = await Trainer.findByPk(req.params.id, {
+            include: {
+                model: Pokemon,
+                through: {
+                    attributes: []
+                }
             }
-        }
-    })
-
-    const count = trainer.Pokemons.length
-
-    let height = 0
-    for (let i = 0; i < trainer.Pokemons.length; i++) {
-        const pokemon = trainer.Pokemons[i];
-        height = height + pokemon.height
-    }
+        })
     
-
-    res.json({
-        enslavedPokeCount: count,
-        avgEnslavedPokeHeight: height / count,
-        trainer
-    })
+        const count = trainer.Pokemons.length
+    
+        let height = 0
+        for (let i = 0; i < trainer.Pokemons.length; i++) {
+            const pokemon = trainer.Pokemons[i];
+            height = height + pokemon.height
+        }
+        
+    
+        res.json({
+            enslavedPokeCount: count,
+            avgEnslavedPokeHeight: height / count,
+            trainer
+        })
+    } catch (err) {
+        next(err)
+    }
 })
 
 app.get('/pokemon/:id', async(req, res) => {
