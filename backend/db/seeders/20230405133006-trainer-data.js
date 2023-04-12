@@ -17,9 +17,9 @@ module.exports = {
      * }], {});
     */
     await queryInterface.bulkInsert(options, [
-      { name: 'Dan', gymBadges: 4, bike: 1 },
-      { name: 'Franco', gymBadges: 5, bike: 0 },
-      { name: 'Olivia', gymBadges: 8, bike: 1 }
+      { name: 'Dan', gymBadges: 4, bike: true },
+      { name: 'Franco', gymBadges: 5, bike: false },
+      { name: 'Olivia', gymBadges: 8, bike: true }
     ])
   },
 
