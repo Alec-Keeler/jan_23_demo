@@ -4,9 +4,12 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "node w11app.js",
-    "dev": "nodemon w11app.js",
-    "reset": "npx dotenv sequelize db:seed:undo:all && npx dotenv sequelize db:migrate:undo:all && npx dotenv sequelize db:migrate && npx dotenv sequelize db:seed:all"
+    "install": "npm --prefix backend install backend",
+    "dev:backend": "npm install --prefix backend start",
+    "sequelize": "npm run --prefix backend sequelize",
+    "sequelize-cli": "npm run --prefix backend sequelize-cli",
+    "start": "npm start --prefix backend",
+    "build": "npm run --prefix backend build"
   },
   "repository": {
     "type": "git",
@@ -18,16 +21,5 @@
   "bugs": {
     "url": "https://github.com/Alec-Keeler/jan_23_demo/issues"
   },
-  "homepage": "https://github.com/Alec-Keeler/jan_23_demo#readme",
-  "dependencies": {
-    "dotenv": "^16.0.3",
-    "dotenv-cli": "^7.1.0",
-    "express": "^4.18.2",
-    "sequelize": "^6.30.0",
-    "sequelize-cli": "^6.6.0",
-    "sqlite3": "^5.1.6"
-  },
-  "devDependencies": {
-    "nodemon": "^2.0.22"
-  }
+  "homepage": "https://github.com/Alec-Keeler/jan_23_demo#readme"
 }
